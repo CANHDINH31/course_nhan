@@ -32,8 +32,8 @@ export class User {
   // 1:active 0:inactive
 
   @Prop({ default: 1 })
-  isDelete: number;
-  // 1:exist 0:not exist
+  enable: number;
+  // 1:enable 0:disable
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

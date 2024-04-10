@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -16,4 +16,8 @@ export class UpdateUserDto {
   @IsArray()
   @IsOptional()
   children: string[];
+
+  @IsOptional()
+  @IsNumber()
+  enable?: number;
 }

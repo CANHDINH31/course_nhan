@@ -107,6 +107,12 @@ export class AuthService {
       if (!isCorrectPassword)
         throw new BadRequestException({ message: 'Password is not correct' });
 
+      if (existAccount.enable === 0) {
+        throw new BadRequestException({
+          message: 'Your account is disable',
+        });
+      }
+
       if (existAccount.status === 0) {
         throw new BadRequestException({
           message: 'Your account is not approve',

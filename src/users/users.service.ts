@@ -154,6 +154,39 @@ export class UsersService {
     }
   }
 
+  async rejectTeacher(role: number, id: string) {
+    if (role !== 4) {
+      throw new BadRequestException({
+        message: 'You are not admin',
+      });
+    }
+    // role:4 - admin
+
+    try {
+      const teacher = await this.userModal.findById(id);
+
+      if (teacher?.role !== 3) {
+        throw new BadRequestException({
+          message: 'The user who needs approval is not teacher',
+        });
+      }
+
+      await this.mailerService.sendMail({
+        from: 'dinhphamcanh@gmail.com',
+        to: teacher?.email,
+        subject: 'Reject teacher notification',
+        html: `You have been rejected as a teacher`,
+      });
+
+      return {
+        status: HttpStatus.CREATED,
+        message: 'Reject',
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findOne(id: string) {
     try {
       return await this.userModal.findById(id);
