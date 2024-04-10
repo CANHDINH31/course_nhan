@@ -106,7 +106,6 @@ export class UsersService {
 
     const query: any = {
       role: { $ne: 4 },
-      isDelete: 1,
     };
 
     if (status) {
@@ -175,8 +174,10 @@ export class UsersService {
         from: 'dinhphamcanh@gmail.com',
         to: teacher?.email,
         subject: 'Reject teacher notification',
-        html: `You have been rejected as a teacher`,
+        html: `You were rejected as a teacher due to invalid credentials`,
       });
+
+      await this.userModal.deleteOne({ _id: id });
 
       return {
         status: HttpStatus.CREATED,

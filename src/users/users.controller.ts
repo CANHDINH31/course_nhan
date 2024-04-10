@@ -34,7 +34,7 @@ export class UsersController {
     return this.usersService.approveTeacher(req?.user?.role, id);
   }
 
-  @Get('/approve-teacher/:id')
+  @Get('/reject-teacher/:id')
   rejectTeacher(@Req() req, @Param('id') id: string) {
     return this.usersService.rejectTeacher(req?.user?.role, id);
   }
