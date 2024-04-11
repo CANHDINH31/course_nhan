@@ -14,8 +14,8 @@ export class Lesson {
   @Prop()
   pdf: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Test' })
-  test: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Course' })
+  course: string;
 }
 
 export const LessonSchema = SchemaFactory.createForClass(Lesson);

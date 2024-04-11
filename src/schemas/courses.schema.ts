@@ -37,9 +37,6 @@ export class Course {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   teacher: string;
-
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Lesson' })
-  lessons: string[];
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
