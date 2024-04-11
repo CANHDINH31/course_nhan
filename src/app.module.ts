@@ -15,6 +15,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { MailerModule } from '@nest-modules/mailer';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { MailerModule } from '@nest-modules/mailer';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
+    CoursesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

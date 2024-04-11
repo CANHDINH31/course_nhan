@@ -31,11 +31,15 @@ export class Course {
   @Prop({ default: 1 })
   status: number;
 
+  @Prop({ default: 3 })
+  approve: number;
+  // 1: approve 0:reject 2:pending 3:notsubmit
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   teacher: string;
 
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Lesson' })
-  lesson: string[];
+  lessons: string[];
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
