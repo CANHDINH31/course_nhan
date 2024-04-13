@@ -30,6 +30,7 @@ export class Course {
 
   @Prop({ default: 1 })
   status: number;
+  // 1: enable 0: disable
 
   @Prop({ default: 3 })
   approve: number;

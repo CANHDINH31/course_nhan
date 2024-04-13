@@ -32,10 +32,11 @@ export class CoursesService {
     }
   }
 
-  async findAll(status: number, teacher: string) {
+  async findAll(status: number, teacher: string, approve: number) {
     const query = {
       ...(teacher && { teacher: teacher }),
       ...(status && { status: Number(status) }),
+      ...(approve && { approve: Number(approve) }),
     };
 
     try {

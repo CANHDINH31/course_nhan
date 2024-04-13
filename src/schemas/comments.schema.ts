@@ -13,13 +13,10 @@ export class Lesson {
   title: string;
 
   @Prop()
-  description: string;
-
-  @Prop()
   video: string;
 
   @Prop()
-  pdf: string;
+  pdf: string[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Course' })
   course: string;
