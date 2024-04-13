@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class CreateLessonDto {
   @IsNotEmpty()
   @IsNumber()
-  oerder: number;
+  order: number;
 
   @IsNotEmpty()
   @IsString()

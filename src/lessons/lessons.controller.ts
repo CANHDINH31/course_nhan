@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
@@ -21,8 +22,9 @@ export class LessonsController {
   }
 
   @Get()
-  findAll() {
-    return this.lessonsService.findAll();
+  findAll(@Req() req) {
+    const { course } = req.query;
+    return this.lessonsService.findAll(course);
   }
 
   @Get(':id')
@@ -32,7 +34,7 @@ export class LessonsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonsService.update(+id, updateLessonDto);
+    return this.lessonsService.update(id, updateLessonDto);
   }
 
   @Delete(':id')
