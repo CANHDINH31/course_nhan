@@ -79,7 +79,12 @@ export class LessonsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} lesson`;
+  async remove(id: string) {
+    try {
+      await this.testModal.deleteMany({ lesson: id });
+      await this.lessonModal.findByIdAndDelete(id);
+
+      return 'DELETE SUCCESSFULLY';
+    } catch (error) {}
   }
 }

@@ -51,12 +51,14 @@ export class CoursesService {
   async findOne(id: string) {
     try {
       const course = await this.courseModal.findById(id);
-      const arrLesson = await this.lessonModal.find({ course: course._id });
+      const arrLesson = await this.lessonModal
+        .find({ course: course._id })
+        .sort({ order: 1 });
 
       const listLesson = [];
       for (const lesson of arrLesson) {
         const test = await this.testModal.findOne({ lesson: lesson._id });
-        listLesson.push({ ...lesson.toObject(), test });
+        listLesson.push({ ...lesson.toObject(), test: test || {} });
       }
 
       return {
