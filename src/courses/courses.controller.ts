@@ -23,8 +23,8 @@ export class CoursesController {
 
   @Get('/')
   findAll(@Req() req) {
-    const { status, teacher } = req.query;
-    return this.coursesService.findAll(status, teacher);
+    const { status, teacher, approve } = req.query;
+    return this.coursesService.findAll(status, teacher, approve);
   }
 
   @Get(':id')
