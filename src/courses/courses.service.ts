@@ -1,14 +1,19 @@
-import { User } from 'src/schemas/users.schema';
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Course } from 'src/schemas/courses.schema';
 import { Model } from 'mongoose';
+import { Lesson } from 'src/schemas/lessons.schema';
+import { Test } from 'src/schemas/tests.schema';
 
 @Injectable()
 export class CoursesService {
-  constructor(@InjectModel(Course.name) private courseModal: Model<Course>) {}
+  constructor(
+    @InjectModel(Course.name) private courseModal: Model<Course>,
+    @InjectModel(Lesson.name) private lessonModal: Model<Lesson>,
+    @InjectModel(Test.name) private testModal: Model<Test>,
+  ) {}
 
   async create(createCourseDto: CreateCourseDto, user) {
     try {
@@ -43,8 +48,24 @@ export class CoursesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: string) {
+    try {
+      const course = await this.courseModal.findById(id);
+      const arrLesson = await this.lessonModal.find({ course: course._id });
+
+      const listLesson = [];
+      for (const lesson of arrLesson) {
+        const test = await this.testModal.findOne({ lesson: lesson._id });
+        listLesson.push({ ...lesson.toObject(), test });
+      }
+
+      return {
+        ...course.toObject(),
+        listLesson,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
