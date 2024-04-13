@@ -17,6 +17,9 @@ export class User {
   @Prop()
   password: string;
 
+  @Prop()
+  description: string;
+
   // 1:student  2:parent  3:teacher  4:admin
   @Prop({ default: 1 })
   role: number;

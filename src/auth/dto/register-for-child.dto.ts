@@ -29,4 +29,8 @@ export class RegisterForChildDto {
   @IsOptional()
   @IsString()
   phone: string;
+
+  @IsOptional()
+  @IsString()
+  description: string;
 }

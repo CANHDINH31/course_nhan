@@ -18,6 +18,10 @@ export class UpdateUserDto {
   children: string[];
 
   @IsOptional()
+  @IsString()
+  description: string;
+
+  @IsOptional()
   @IsNumber()
   enable?: number;
 }
