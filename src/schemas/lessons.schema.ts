@@ -6,6 +6,9 @@ export type LessonDocument = HydratedDocument<Lesson>;
 @Schema({ timestamps: true })
 export class Lesson {
   @Prop()
+  order: number;
+
+  @Prop()
   title: string;
 
   @Prop()

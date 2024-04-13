@@ -21,15 +21,10 @@ export class CoursesController {
     return this.coursesService.create(createCourseDto, req?.user);
   }
 
-  @Get('/my-create-course')
-  myCreateCourse(@Req() req) {
-    return this.coursesService.myCreateCourse(req?.user);
-  }
-
   @Get('/')
   findAll(@Req() req) {
-    const { status } = req.query;
-    return this.coursesService.findAll(req?.user?.role, status);
+    const { status, teacher } = req.query;
+    return this.coursesService.findAll(status, teacher);
   }
 
   @Get(':id')
@@ -39,7 +34,7 @@ export class CoursesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(+id, updateCourseDto);
+    return this.coursesService.update(id, updateCourseDto);
   }
 
   @Delete(':id')

@@ -27,35 +27,11 @@ export class CoursesService {
     }
   }
 
-  async myCreateCourse(user: any) {
-    if (user?.role !== 3) {
-      throw new BadRequestException({
-        message: 'You are not teacher',
-      });
-    }
-
-    try {
-      return await this.courseModal
-        .find({ teacher: user._id })
-        .sort({ createdAt: -1 })
-        .populate('teacher');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findAll(role: number, status: number) {
-    if (role !== 4) {
-      throw new BadRequestException({
-        message: 'You are not admin',
-      });
-    }
-
-    const query: any = {};
-
-    if (status) {
-      query.status = Number(status);
-    }
+  async findAll(status: number, teacher: string) {
+    const query = {
+      ...(teacher && { teacher: teacher }),
+      ...(status && { status: Number(status) }),
+    };
 
     try {
       return await this.courseModal
@@ -71,8 +47,22 @@ export class CoursesService {
     return `This action returns a #${id} course`;
   }
 
-  update(id: number, updateCourseDto: UpdateCourseDto) {
-    return `This action updates a #${id} course`;
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
+    try {
+      const data = await this.courseModal.findByIdAndUpdate(
+        id,
+        updateCourseDto,
+        { new: true },
+      );
+
+      return {
+        status: HttpStatus.CREATED,
+        message: 'SUCCESSFULL',
+        data,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   remove(id: number) {
