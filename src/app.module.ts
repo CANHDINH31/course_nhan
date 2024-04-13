@@ -17,6 +17,7 @@ import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { MailerModule } from '@nest-modules/mailer';
 import { CoursesModule } from './courses/courses.module';
 import { LessonsModule } from './lessons/lessons.module';
+import { TestsModule } from './tests/tests.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { LessonsModule } from './lessons/lessons.module';
     UsersModule,
     CoursesModule,
     LessonsModule,
+    TestsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

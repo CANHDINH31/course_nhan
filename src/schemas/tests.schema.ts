@@ -12,7 +12,7 @@ export class Test {
   title: string;
 
   @Prop()
-  content: string;
+  qa: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' })
   lesson: string;
