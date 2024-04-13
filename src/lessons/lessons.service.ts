@@ -4,10 +4,14 @@ import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Lesson } from 'src/schemas/lessons.schema';
+import { Test } from 'src/schemas/tests.schema';
 
 @Injectable()
 export class LessonsService {
-  constructor(@InjectModel(Lesson.name) private lessonModal: Model<Lesson>) {}
+  constructor(
+    @InjectModel(Lesson.name) private lessonModal: Model<Lesson>,
+    @InjectModel(Test.name) private testModal: Model<Test>,
+  ) {}
 
   async create(createLessonDto: CreateLessonDto) {
     try {
@@ -29,17 +33,32 @@ export class LessonsService {
     };
 
     try {
-      return await this.lessonModal
+      const listLesson = await this.lessonModal
         .find(query)
         .sort({ order: 1 })
         .populate('course');
+
+      const listResult = [];
+      for (const lesson of listLesson) {
+        const test = await this.testModal.findOne({ lesson: lesson._id });
+        listResult.push({ ...lesson.toObject(), test });
+      }
+      return listResult;
     } catch (error) {
       throw error;
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lesson`;
+  async findOne(id: string) {
+    try {
+      const lesson = await this.lessonModal.findById(id);
+      const test = await this.testModal.findOne({ lesson: lesson._id });
+
+      return {
+        ...lesson.toObject(),
+        test,
+      };
+    } catch (error) {}
   }
 
   async update(id: string, updateLessonDto: UpdateLessonDto) {
