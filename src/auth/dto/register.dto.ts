@@ -36,6 +36,10 @@ export class RegisterDto {
   @IsString()
   phone: string;
 
+  @IsOptional()
+  @IsString()
+  description: string;
+
   @ValidateIf((object, value) => object.role === 3)
   @IsNotEmpty()
   @IsString()

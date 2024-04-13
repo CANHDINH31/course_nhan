@@ -70,6 +70,7 @@ export class AuthService {
         subject: 'Register Account Successfully',
         text: `Congratulations, you successfully registered an account`,
       });
+
       const child = await this.userService.create({
         ...registerForChildDto,
         password,
@@ -82,6 +83,7 @@ export class AuthService {
           _id: user?._id,
           phone: user?.phone,
           name: user.name,
+          description: user?.description,
           children: [...user.children, child.data._id],
         },
         user._id,

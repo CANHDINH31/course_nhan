@@ -28,6 +28,10 @@ export class CreateUserDto {
   phone: string;
 
   @IsOptional()
+  @IsString()
+  description: string;
+
+  @IsOptional()
   @IsNumber()
   role: number;
 
