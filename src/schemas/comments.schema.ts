@@ -16,7 +16,7 @@ export class Lesson {
   video: string;
 
   @Prop()
-  pdf: string;
+  pdf: string[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Course' })
   course: string;

@@ -13,6 +13,9 @@ export class Lesson {
   title: string;
 
   @Prop()
+  description: string;
+
+  @Prop()
   video: string;
 
   @Prop()
