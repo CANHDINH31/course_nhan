@@ -19,6 +19,7 @@ import { CoursesModule } from './courses/courses.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { TestsModule } from './tests/tests.module';
 import { SubsModule } from './subs/subs.module';
+import { ResultsModule } from './results/results.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { SubsModule } from './subs/subs.module';
     LessonsModule,
     TestsModule,
     SubsModule,
+    ResultsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
