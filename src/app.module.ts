@@ -18,6 +18,7 @@ import { MailerModule } from '@nest-modules/mailer';
 import { CoursesModule } from './courses/courses.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { TestsModule } from './tests/tests.module';
+import { SubsModule } from './subs/subs.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { TestsModule } from './tests/tests.module';
     CoursesModule,
     LessonsModule,
     TestsModule,
+    SubsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

@@ -5,21 +5,14 @@ export type CommentDocument = HydratedDocument<Comment>;
 
 @Schema({ timestamps: true })
 export class Comment {
-  @Prop()
-  order: number;
-  // STT: 1,2,3
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
+  replyComment: string;
 
   @Prop()
-  title: string;
+  content: string;
 
-  @Prop()
-  video: string;
-
-  @Prop()
-  pdf: string[];
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Course' })
-  course: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' })
+  lesson: string;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);
