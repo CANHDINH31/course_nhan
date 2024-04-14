@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 
-export type LessonDocument = HydratedDocument<Lesson>;
+export type CommentDocument = HydratedDocument<Comment>;
 
 @Schema({ timestamps: true })
-export class Lesson {
+export class Comment {
   @Prop()
   order: number;
   // STT: 1,2,3
@@ -22,10 +22,4 @@ export class Lesson {
   course: string;
 }
 
-export const LessonSchema = SchemaFactory.createForClass(Lesson);
-
-// const qa = [{
-//   "question":"viet o chau nao ?",
-//   "answer":["chau a", "chau au", "chau phi","chau mi"],
-//   "answer correct":0
-// },{},{}]
+export const CommentSchema = SchemaFactory.createForClass(Comment);

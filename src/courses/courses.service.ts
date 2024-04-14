@@ -6,6 +6,7 @@ import { Course } from 'src/schemas/courses.schema';
 import { Model } from 'mongoose';
 import { Lesson } from 'src/schemas/lessons.schema';
 import { Test } from 'src/schemas/tests.schema';
+import { title } from 'process';
 
 @Injectable()
 export class CoursesService {
@@ -32,11 +33,17 @@ export class CoursesService {
     }
   }
 
-  async findAll(status: number, teacher: string, approve: number) {
+  async findAll(
+    status: number,
+    teacher: string,
+    approve: number,
+    title: string,
+  ) {
     const query = {
       ...(teacher && { teacher: teacher }),
       ...(status && { status: Number(status) }),
       ...(approve && { approve: Number(approve) }),
+      ...(title && { title: { $regex: title, $options: 'i' } }),
     };
 
     try {
