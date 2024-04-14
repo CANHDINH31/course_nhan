@@ -20,6 +20,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { TestsModule } from './tests/tests.module';
 import { SubsModule } from './subs/subs.module';
 import { ResultsModule } from './results/results.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { ResultsModule } from './results/results.module';
     TestsModule,
     SubsModule,
     ResultsModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

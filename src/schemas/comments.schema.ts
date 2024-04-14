@@ -8,6 +8,9 @@ export class Comment {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
   replyComment: string;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  user: string;
+
   @Prop()
   content: string;
 
