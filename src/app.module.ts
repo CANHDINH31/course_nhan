@@ -21,6 +21,7 @@ import { TestsModule } from './tests/tests.module';
 import { SubsModule } from './subs/subs.module';
 import { ResultsModule } from './results/results.module';
 import { CommentsModule } from './comments/comments.module';
+import { RatesModule } from './rates/rates.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { CommentsModule } from './comments/comments.module';
     SubsModule,
     ResultsModule,
     CommentsModule,
+    RatesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -84,6 +86,14 @@ export class AppModule implements NestModule {
         },
         {
           path: '/api/subjects',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/courses/(.*)',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/courses',
           method: RequestMethod.GET,
         },
         {

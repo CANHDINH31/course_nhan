@@ -37,6 +37,16 @@ export class ResultsService {
 
   async create(createResultDto: CreateResultDto) {
     try {
+      const existResult = await this.resultModal.findOne({
+        student: createResultDto.student,
+        test: createResultDto.test,
+      });
+
+      if (existResult)
+        throw new BadRequestException({
+          message: 'You have already done thís test',
+        });
+
       const parent = await this.userModal.findOne({
         children: createResultDto.student,
       });
