@@ -96,21 +96,11 @@ export class UsersService {
     }
   }
 
-  async findAll(role: number, status: number) {
-    if (role !== 4) {
-      throw new BadRequestException({
-        message: 'You are not admin',
-      });
-    }
-    // role:4 - admin
-
-    const query: any = {
-      role: { $ne: 4 },
+  async findAll(status: number, role: number) {
+    const query = {
+      ...(status && { status: Number(status) }),
+      ...(role && { role: Number(role) }),
     };
-
-    if (status) {
-      query.status = Number(status);
-    }
 
     try {
       return await this.userModal

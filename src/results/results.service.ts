@@ -42,11 +42,6 @@ export class ResultsService {
         test: createResultDto.test,
       });
 
-      if (existResult)
-        throw new BadRequestException({
-          message: 'You have already done thís test',
-        });
-
       const parent = await this.userModal.findOne({
         children: createResultDto.student,
       });
@@ -105,16 +100,24 @@ export class ResultsService {
 
         throw new BadRequestException({ message: 'Not enough pass test' });
       }
-
-      const data = await this.resultModal.create({
-        ...createResultDto,
-        ...(parent && { parent: parent?._id }),
-        lesson: test.lesson._id,
-        course: test.lesson.course?._id,
-        order: test.lesson.order,
-        totalQuestion: arrayCorrect?.length,
-        totalCorrect: numberCorrect,
-      });
+      let data;
+      if (existResult) {
+        data = await this.resultModal.findById(
+          existResult._id,
+          { totalCorrect: numberCorrect },
+          { new: true },
+        );
+      } else {
+        data = await this.resultModal.create({
+          ...createResultDto,
+          ...(parent && { parent: parent?._id }),
+          lesson: test.lesson._id,
+          course: test.lesson.course?._id,
+          order: test.lesson.order,
+          totalQuestion: arrayCorrect?.length,
+          totalCorrect: numberCorrect,
+        });
+      }
 
       if (parent) {
         await this.mailerService.sendMail({
