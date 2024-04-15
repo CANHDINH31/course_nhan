@@ -22,6 +22,7 @@ import { SubsModule } from './subs/subs.module';
 import { ResultsModule } from './results/results.module';
 import { CommentsModule } from './comments/comments.module';
 import { RatesModule } from './rates/rates.module';
+import { SatisfyModule } from './satisfy/satisfy.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { RatesModule } from './rates/rates.module';
     ResultsModule,
     CommentsModule,
     RatesModule,
+    SatisfyModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
