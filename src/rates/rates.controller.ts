@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { RatesService } from './rates.service';
 import { CreateRateDto } from './dto/create-rate.dto';
@@ -21,22 +22,23 @@ export class RatesController {
   }
 
   @Get()
-  findAll() {
-    return this.ratesService.findAll();
+  findAll(@Req() req) {
+    const { course, user, content } = req.query;
+    return this.ratesService.findAll(course, user, content);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ratesService.findOne(+id);
+    return this.ratesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRateDto: UpdateRateDto) {
-    return this.ratesService.update(+id, updateRateDto);
+    return this.ratesService.update(id, updateRateDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ratesService.remove(+id);
+    return this.ratesService.remove(id);
   }
 }
