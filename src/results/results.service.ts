@@ -104,7 +104,10 @@ export class ResultsService {
       if (existResult) {
         data = await this.resultModal.findById(
           existResult._id,
-          { totalCorrect: numberCorrect },
+          {
+            answer: createResultDto.answer,
+            totalCorrect: numberCorrect,
+          },
           { new: true },
         );
       } else {
