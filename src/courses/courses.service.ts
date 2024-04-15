@@ -38,12 +38,18 @@ export class CoursesService {
     teacher: string,
     approve: number,
     title: string,
+    rank: number,
+    className: number,
+    subject: number,
   ) {
     const query = {
       ...(teacher && { teacher: teacher }),
       ...(status && { status: Number(status) }),
       ...(approve && { approve: Number(approve) }),
       ...(title && { title: { $regex: title, $options: 'i' } }),
+      ...(rank && { rank: Number(rank) }),
+      ...(className && { class: Number(className) }),
+      ...(subject && { subject: Number(subject) }),
     };
 
     try {

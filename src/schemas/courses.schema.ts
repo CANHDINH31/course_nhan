@@ -14,6 +14,10 @@ export class Course {
   // 1:1 2:2 3:3 ..... 13:Năm nhất 14:Năm hai ...
 
   @Prop()
+  subject: number;
+  // 1.Toán 2.Tiếng Việt 3... Tùy do FE truyền lên và setup
+
+  @Prop()
   title: string;
 
   @Prop()

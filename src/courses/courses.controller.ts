@@ -24,8 +24,25 @@ export class CoursesController {
 
   @Get('/')
   findAll(@Req() req) {
-    const { status, teacher, approve, title } = req.query;
-    return this.coursesService.findAll(status, teacher, approve, title);
+    const {
+      status,
+      teacher,
+      approve,
+      title,
+      rank,
+      class: className,
+      subject,
+    } = req.query;
+
+    return this.coursesService.findAll(
+      status,
+      teacher,
+      approve,
+      title,
+      rank,
+      className,
+      subject,
+    );
   }
 
   @Get(':id')
