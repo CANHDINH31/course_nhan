@@ -6,7 +6,6 @@ import { Course } from 'src/schemas/courses.schema';
 import { Model } from 'mongoose';
 import { Lesson } from 'src/schemas/lessons.schema';
 import { Test } from 'src/schemas/tests.schema';
-import { title } from 'process';
 
 @Injectable()
 export class CoursesService {
@@ -64,7 +63,7 @@ export class CoursesService {
 
   async findOne(id: string) {
     try {
-      const course = await this.courseModal.findById(id);
+      const course = await this.courseModal.findById(id).populate('teacher');
       const arrLesson = await this.lessonModal
         .find({ course: course._id })
         .sort({ order: 1 });
