@@ -180,7 +180,7 @@ export class UsersService {
 
   async findOne(id: string) {
     try {
-      return await this.userModal.findById(id);
+      return await this.userModal.findById(id).populate('children');
     } catch (error) {}
   }
 
