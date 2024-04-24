@@ -52,10 +52,26 @@ export class CoursesService {
     };
 
     try {
-      return await this.courseModal
+      const listCourse = await this.courseModal
         .find(query)
         .sort({ createdAt: -1 })
         .populate('teacher');
+
+      const result = [];
+
+      for (const course of listCourse) {
+        const total = await this.lessonModal.countDocuments({
+          course: course._id,
+        });
+
+        result.push({
+          ...course.toObject(),
+          totalLesson: total,
+          totalTest: total,
+        });
+      }
+
+      return result;
     } catch (error) {
       throw error;
     }
