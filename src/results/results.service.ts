@@ -107,6 +107,7 @@ export class ResultsService {
           {
             answer: createResultDto.answer,
             totalCorrect: numberCorrect,
+            totalQuestion: arrayCorrect?.length,
           },
           { new: true },
         );
