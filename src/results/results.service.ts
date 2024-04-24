@@ -102,7 +102,7 @@ export class ResultsService {
       }
       let data;
       if (existResult) {
-        data = await this.resultModal.findById(
+        data = await this.resultModal.findByIdAndUpdate(
           existResult._id,
           {
             answer: createResultDto.answer,
