@@ -46,15 +46,15 @@ import { SatisfyModule } from './satisfy/satisfy.module';
           debugger: true,
           sercureConnection: false,
           auth: {
-            user: 'dinhphamcanh@gmail.com',
-            pass: 'gsfa mxmh ezpw idwn',
+            user: 'otlichno.edu@gmail.com',
+            pass: 'oeth unba yltf uhzx',
           },
           tls: {
             rejectUnAuthorized: true,
           },
         },
         defaults: {
-          from: `Course`,
+          from: 'Otlichno Education <otlichno.edu@gmail.com>',
         },
       }),
     }),

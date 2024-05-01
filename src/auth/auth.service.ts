@@ -15,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private mailerService: MailerService,
-  ) {}
+  ) { }
 
   async register(registerDto: RegisterDto) {
     try {
@@ -32,11 +32,78 @@ export class AuthService {
       if (registerDto.role === 3) {
         status = 0;
       }
-
+      // gửi mail khi đăng ký (chưa phân biệt teacher với student/parent)
       await this.mailerService.sendMail({
         to: registerDto.email,
-        subject: 'Register Account Successfully',
-        text: `Congratulations, you successfully registered an account. If you are a teacher, please continue to wait for the successful activation email`,
+        subject: registerDto.role === 3 ? 'Đăng ký xác nhận tài khoản' : 'Đăng ký tài khoản thành công',
+        html: (registerDto.role === 1 || registerDto.role === 2) ? `
+        <body style="margin: 0; padding: 0; background-color: #ffffff;">
+          <center>
+                <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
+                    <table cellpadding="0" cellspacing="0" width="100%"
+                        style="max-width: 500px; margin-top: 30px; background-color: #f8f8f8; border: 1px solid #c7c3c3;">
+                        <tr>
+                            <td align="center" style="padding: 10px 0 10px 0; background-color: #aad58a;">
+                                <h1 style="font-size: 24px; margin-bottom: 20px;">Đăng ký tài khoản thành công</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 40px;">
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin chào <strong style="color: rgb(50, 50, 226);">${registerDto.name}</strong>!</p>
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Chúc mừng bạn đã đăng ký thành công tài khoản.</p>
+                                <!-- <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">If you are a teacher, please continue to wait for the successful activation email.</p> -->
+                                <br>
+                                <p style="font-size: 16px; ">Cảm ơn bạn đã sử dụng dịch vụ của <strong>Otlichno Education!</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 20px 30px 20px;">
+                                <hr  width="85%" align="center" />
+                                <p style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                                    Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                                    hoặc số điện thoại +79533733420</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </center>
+        </body>
+        `
+        :
+        `
+        <body style="margin: 0; padding: 0; background-color: #ffffff;">
+            <center>
+                <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
+                    <table cellpadding="0" cellspacing="0" width="100%"
+                        style="max-width: 500px; margin-top: 30px; background-color: #f8f8f8; border: 1px solid #c7c3c3;">
+                        <tr>
+                            <td align="center" style="padding: 10px 0 10px 0; background-color: #aad58a;">
+                                <h1 style="font-size: 24px; margin-bottom: 20px;">Đăng ký xác nhận tài khoản</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 40px;">
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin chào <strong style="color: rgb(50, 50, 226);">${registerDto.name}</strong>!</p>
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Bạn đã đăng ký xác nhận tài khoản với vai trò giáo viên thành công.</p>
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin vui lòng chờ xác nhận từ Admin về chứng chỉ của bạn. Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất!</p>
+                                
+                                <br>
+                                <p style="font-size: 16px; ">Cảm ơn bạn đã sử dụng dịch vụ của <strong>Otlichno Education!</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 20px 30px 20px;">
+                                <hr  width="85%" align="center" />
+                                <p style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                                    Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                                    hoặc số điện thoại +79533733420</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </center>
+        </body>
+        `
       });
 
       return await this.userService.create({
@@ -65,10 +132,43 @@ export class AuthService {
           message: 'Email hoặc Username đã tồn tại',
         });
       const password = await bcrypt.hash(registerForChildDto.password, 10);
+      
+      // gửi mail khi đăng ký cho con (gửi vào mail con)
       await this.mailerService.sendMail({
         to: registerForChildDto.email,
-        subject: 'Register Account Successfully',
-        text: `Congratulations, you successfully registered an account`,
+        subject: 'Đăng ký tài khoản thành công',
+        html:  `
+        <body style="margin: 0; padding: 0; background-color: #ffffff;">
+          <center>
+              <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
+                  <table cellpadding="0" cellspacing="0" width="100%"
+                      style="max-width: 500px; margin-top: 30px; background-color: #f8f8f8; border: 1px solid #c7c3c3;">
+                      <tr>
+                          <td align="center" style="padding: 10px 0 10px 0; background-color: #aad58a;">
+                              <h1 style="font-size: 24px; margin-bottom: 20px;">Đăng ký tài khoản thành công</h1>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="padding: 20px 40px;">
+                              <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin chào <strong style="color: rgb(50, 50, 226);">${registerForChildDto.name}</strong>!</p>
+                              <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Bạn đã được phụ huynh ${user.name} đăng ký tài khoản thành công.</p>
+                              <br>
+                              <p style="font-size: 16px; ">Cảm ơn đã sử dụng dịch vụ của <strong>Otlichno Education!</strong></p>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="padding: 10px 20px 30px 20px;">
+                              <hr  width="85%" align="center" />
+                              <p style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                                  Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                                  hoặc số điện thoại +79533733420</p>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+          </center>
+        </body>
+        `
       });
 
       const child = await this.userService.create({

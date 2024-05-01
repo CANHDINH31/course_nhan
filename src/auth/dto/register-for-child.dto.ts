@@ -22,7 +22,7 @@ export class RegisterForChildDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(10)
+  @MaxLength(30)
   @MinLength(8)
   password: string;
 

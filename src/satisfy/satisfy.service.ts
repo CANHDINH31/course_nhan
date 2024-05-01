@@ -15,10 +15,10 @@ export class SatisfyService {
 
   async satifyAdmin() {
     try {
-      const numberCourse = await this.courseModal.countDocuments();
+      const numberCourse = await this.courseModal.countDocuments({approve: 1});
       const numberStudent = await this.userModal.countDocuments({ role: 1 });
       const numberParent = await this.userModal.countDocuments({ role: 2 });
-      const numberTeacher = await this.userModal.countDocuments({ role: 3 });
+      const numberTeacher = await this.userModal.countDocuments({ role: 3, status: 1 });
 
       const fee = await this.subModal.aggregate([
         {
@@ -58,9 +58,9 @@ export class SatisfyService {
       });
 
       const totalFee = listSub?.reduce((a, b) => a + b.feeTeacher, 0);
-
+      const coursesApprove = listCourse.filter(course => course.approve === 1)
       return {
-        numberCourse: listCourse?.length,
+        numberCourse: coursesApprove?.length,
         numberStudent: listIdStudent?.length,
         totalFee,
       };
