@@ -78,13 +78,15 @@ export class AuthService {
         role: 1,
       });
 
+      const detailUser: any = await this.userService.findOne(user._id);
+
       return await this.userService.changeInfo(
         {
           _id: user?._id,
           phone: user?.phone,
           name: user.name,
           description: user?.description,
-          children: [...user.children, child.data._id],
+          children: [...detailUser.children, child.data._id],
         },
         user._id,
       );

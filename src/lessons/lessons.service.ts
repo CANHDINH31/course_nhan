@@ -5,12 +5,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Lesson } from 'src/schemas/lessons.schema';
 import { Test } from 'src/schemas/tests.schema';
+import { Comment } from 'src/schemas/comments.schema';
 
 @Injectable()
 export class LessonsService {
   constructor(
     @InjectModel(Lesson.name) private lessonModal: Model<Lesson>,
     @InjectModel(Test.name) private testModal: Model<Test>,
+    @InjectModel(Comment.name) private commentModal: Model<Comment>,
   ) {}
 
   async create(createLessonDto: CreateLessonDto) {
@@ -82,6 +84,7 @@ export class LessonsService {
   async remove(id: string) {
     try {
       await this.testModal.deleteMany({ lesson: id });
+      await this.commentModal.deleteMany({ lesson: id });
       await this.lessonModal.findByIdAndDelete(id);
 
       return 'DELETE SUCCESSFULLY';

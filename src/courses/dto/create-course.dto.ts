@@ -9,6 +9,10 @@ export class CreateCourseDto {
   @IsNumber()
   class: number;
 
+  @IsOptional()
+  @IsNumber()
+  subject: number;
+
   @IsNotEmpty()
   @IsString()
   title: string;

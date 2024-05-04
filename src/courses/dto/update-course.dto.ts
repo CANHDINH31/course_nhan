@@ -10,6 +10,10 @@ export class UpdateCourseDto {
   class: number;
 
   @IsOptional()
+  @IsNumber()
+  subject: number;
+
+  @IsOptional()
   @IsString()
   title: string;
 

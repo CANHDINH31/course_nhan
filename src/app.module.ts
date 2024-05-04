@@ -18,6 +18,11 @@ import { MailerModule } from '@nest-modules/mailer';
 import { CoursesModule } from './courses/courses.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { TestsModule } from './tests/tests.module';
+import { SubsModule } from './subs/subs.module';
+import { ResultsModule } from './results/results.module';
+import { CommentsModule } from './comments/comments.module';
+import { RatesModule } from './rates/rates.module';
+import { SatisfyModule } from './satisfy/satisfy.module';
 
 @Module({
   imports: [
@@ -59,6 +64,11 @@ import { TestsModule } from './tests/tests.module';
     CoursesModule,
     LessonsModule,
     TestsModule,
+    SubsModule,
+    ResultsModule,
+    CommentsModule,
+    RatesModule,
+    SatisfyModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -81,11 +91,23 @@ export class AppModule implements NestModule {
           method: RequestMethod.GET,
         },
         {
+          path: '/api/courses/(.*)',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/courses',
+          method: RequestMethod.GET,
+        },
+        {
           path: '/api/schedules/find',
           method: RequestMethod.POST,
         },
         {
           path: '/api/schedules',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/rates',
           method: RequestMethod.GET,
         },
       )

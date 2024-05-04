@@ -32,18 +32,46 @@ export class CoursesService {
     }
   }
 
-  async findAll(status: number, teacher: string, approve: number) {
+  async findAll(
+    status: number,
+    teacher: string,
+    approve: number,
+    title: string,
+    rank: number,
+    className: number,
+    subject: number,
+  ) {
     const query = {
       ...(teacher && { teacher: teacher }),
       ...(status && { status: Number(status) }),
       ...(approve && { approve: Number(approve) }),
+      ...(title && { title: { $regex: title, $options: 'i' } }),
+      ...(rank && { rank: Number(rank) }),
+      ...(className && { class: Number(className) }),
+      ...(subject && { subject: Number(subject) }),
     };
 
     try {
-      return await this.courseModal
+      const listCourse = await this.courseModal
         .find(query)
         .sort({ createdAt: -1 })
         .populate('teacher');
+
+      const result = [];
+
+      for (const course of listCourse) {
+        const total = await this.lessonModal.countDocuments({
+          course: course._id,
+        });
+
+        result.push({
+          ...course.toObject(),
+          totalLesson: total,
+          totalTest: total,
+        });
+      }
+
+      return result;
     } catch (error) {
       throw error;
     }
@@ -51,7 +79,7 @@ export class CoursesService {
 
   async findOne(id: string) {
     try {
-      const course = await this.courseModal.findById(id);
+      const course = await this.courseModal.findById(id).populate('teacher');
       const arrLesson = await this.lessonModal
         .find({ course: course._id })
         .sort({ order: 1 });

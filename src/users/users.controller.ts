@@ -24,8 +24,8 @@ export class UsersController {
 
   @Get('/')
   findAll(@Req() req) {
-    const { status } = req.query;
-    return this.usersService.findAll(req?.user?.role, status);
+    const { status, role } = req.query;
+    return this.usersService.findAll(status, role);
   }
 
   @Get('/approve-teacher/:id')

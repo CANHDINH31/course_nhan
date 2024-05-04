@@ -1,3 +1,4 @@
+import { title } from 'process';
 import {
   Controller,
   Get,
@@ -23,8 +24,25 @@ export class CoursesController {
 
   @Get('/')
   findAll(@Req() req) {
-    const { status, teacher, approve } = req.query;
-    return this.coursesService.findAll(status, teacher, approve);
+    const {
+      status,
+      teacher,
+      approve,
+      title,
+      rank,
+      class: className,
+      subject,
+    } = req.query;
+
+    return this.coursesService.findAll(
+      status,
+      teacher,
+      approve,
+      title,
+      rank,
+      className,
+      subject,
+    );
   }
 
   @Get(':id')
