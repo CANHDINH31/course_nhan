@@ -58,6 +58,11 @@ export class UsersController {
     return this.usersService.changeInfo(updateUserDto, id);
   }
 
+  @Patch('/blockAccount/:id')
+  blockAccount(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.blockAccount(updateUserDto, id);
+  }
+
   @Delete('/:id')
   remove(@Param('id') id: string, @Req() req) {
     return this.usersService.remove(id, req?.user?.role);

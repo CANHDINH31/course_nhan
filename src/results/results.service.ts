@@ -68,37 +68,38 @@ export class ResultsService {
       const perCorrect = numberCorrect / arrayCorrect?.length;
 
       if (perCorrect < this.PASS_EXAM) {
-        if (parent) {
-          await this.mailerService.sendMail({
-            to: parent.email,
-            subject: 'Notification of test results',
-            html: `<h1>TEST INFO</h1>
-            <p>Parent: ${parent?.name || ''}</p>
-            <p>Student: ${student?.name}</p>
-            <p>Course: ${test.lesson.course?.title}</p>
-            <p>Lesson: ${test.lesson?.title}</p>
-            <p>Test: ${test?.title}</p>
-            <p>Totoal Question: ${arrayCorrect?.length}</p>
-            <p>Total Correct: ${numberCorrect}</p>
-            <p>Status: Failure</p>`,
-          });
-        }
+        // if (parent) {
+        //   // gửi kết quả test đến parent
+        //   await this.mailerService.sendMail({
+        //     to: parent.email,
+        //     subject: 'Notification of test results',
+        //     html: `<h1>TEST INFO</h1>
+        //     <p>Parent: ${parent?.name || ''}</p>
+        //     <p>Student: ${student?.name}</p>
+        //     <p>Course: ${test.lesson.course?.title}</p>
+        //     <p>Lesson: ${test.lesson?.title}</p>
+        //     <p>Test: ${test?.title}</p>
+        //     <p>Totoal Question: ${arrayCorrect?.length}</p>
+        //     <p>Total Correct: ${numberCorrect}</p>
+        //     <p>Status: Failure</p>`,
+        //   });
+        // }
 
-        await this.mailerService.sendMail({
-          to: student.email,
-          subject: 'Notification of test results',
-          html: `<h1>TEST INFO</h1>
-          <p>Parent: ${parent?.name || ''}</p>
-          <p>Student: ${student?.name}</p>
-          <p>Course: ${test.lesson.course?.title}</p>
-          <p>Lesson: ${test.lesson?.title}</p>
-          <p>Test: ${test?.title}</p>
-          <p>Totoal Question: ${arrayCorrect?.length}</p>
-          <p>Total Correct: ${numberCorrect}</p>
-          <p>Status: Failure</p>`,
-        });
+        // await this.mailerService.sendMail({
+        //   to: student.email,
+        //   subject: 'Notification of test results',
+        //   html: `<h1>TEST INFO</h1>
+        //   <p>Parent: ${parent?.name || ''}</p>
+        //   <p>Student: ${student?.name}</p>
+        //   <p>Course: ${test.lesson.course?.title}</p>
+        //   <p>Lesson: ${test.lesson?.title}</p>
+        //   <p>Test: ${test?.title}</p>
+        //   <p>Totoal Question: ${arrayCorrect?.length}</p>
+        //   <p>Total Correct: ${numberCorrect}</p>
+        //   <p>Status: Failure</p>`,
+        // });
 
-        throw new BadRequestException({ message: 'Not enough pass test' });
+        throw new BadRequestException({ message: 'Bạn không đủ điểm vượt qua bài kiểm tra' });
       }
       let data;
       if (existResult) {
@@ -122,36 +123,128 @@ export class ResultsService {
           totalCorrect: numberCorrect,
         });
       }
-
+      const dateCreated = require('moment')().format('DD/MM/YYYY HH:mm');
+      const examScores = (numberCorrect / (arrayCorrect?.length)) * 100
       if (parent) {
         await this.mailerService.sendMail({
           to: parent.email,
-          subject: 'Notification of test results',
-          html: `<h1>TEST INFO</h1>
-          <p>Parent: ${parent?.name || ''}</p>
-          <p>Student: ${student?.name}</p>
-          <p>Course: ${test.lesson.course?.title}</p>
-          <p>Lesson: ${test.lesson?.title}</p>
-          <p>Test: ${test?.title}</p>
-          <p>Totoal Question: ${arrayCorrect?.length}</p>
-          <p>Total Correct: ${numberCorrect}</p>
-          <p>Status: Pass</p>`,
+          subject: 'Thông báo kết quả bài kiểm tra',
+          // html: `<h1>TEST INFO</h1>
+          // <p>Parent: ${parent?.name || ''}</p>
+          // <p>Student: ${student?.name}</p>
+          // <p>Course: ${test.lesson.course?.title}</p>
+          // <p>Lesson: ${test.lesson?.title}</p>
+          // <p>Test: ${test?.title}</p>
+          // <p>Totoal Question: ${arrayCorrect?.length}</p>
+          // <p>Total Correct: ${numberCorrect}</p>
+          // <p>Exam scores: ${examScores}%</p>
+          // <p>Date finished: ${dateCreated}
+          // <p>Status: Pass</p>`,
+          html: `
+          <body>
+            <div style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+                <div
+                    style="max-width: 600px; box-sizing: border-box; margin: 0 auto; padding: 20px; padding-left: 50px; background-color: #ffffff;
+              border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <div ><h2 style="text-align: center; color: rgb(243, 94, 8); font-size: 30px;">Kết quả bài kiểm tra</h2></div>
+                    <div style="margin: 20px 0; font-size: 16px;">
+                        
+                        <p>Xin chào <strong style="color: rgb(29, 29, 246);">${parent?.name || ''}</strong>!</p>
+                        <p>Chúng tôi gửi bảng kết quả bài kiểm tra của con bạn.</p>
+                    </div>
+                    <table
+                        style="width: 70%; border-collapse: collapse; margin-left: auto; margin-right: auto; font-size: 13px;">
+                        <thead>
+                            <tr>
+                                <th
+                                    style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%; background-color: #f2f2f2; text-align: center;">
+                                </th>
+                                <th
+                                    style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #f2f2f2; text-align: center;">
+                                    Thông tin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Phụ
+                                    huynh</td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${parent?.name || ''}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Học viên
+                                </td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${student?.name}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Khóa học
+                                </td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${test.lesson.course?.title}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Bài học
+                                </td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${test.lesson?.title}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Bài kiểm
+                                    tra</td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${test?.title}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Điểm bài
+                                    kiểm tra</td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${numberCorrect}/${arrayCorrect?.length} (${examScores}%) </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Ngày
+                                    hoàn thành</td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    ${dateCreated}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; width: 35%;">Trạng
+                                    thái</td>
+                                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-weight: bold;">
+                                    Vượt qua</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 16px;">
+                        <p>Chúc mừng con bạn đã vượt qua bài kiểm tra và được mở bài học mới.</p>
+                        <p>Hãy chờ kết quả của bài học mới.</p>
+                        <hr width="85%" align="center" style="margin-top: 50px;" />
+                        <p
+                            style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                            Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa
+                            chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                            hoặc số điện thoại +79533733420</p>
+                    </div>
+                </div>
+            </div>
+          </body>
+          `
         });
       }
 
-      await this.mailerService.sendMail({
-        to: student.email,
-        subject: 'Notification of test results',
-        html: `<h1>TEST INFO</h1>
-        <p>Parent: ${parent?.name || ''}</p>
-        <p>Student: ${student?.name}</p>
-        <p>Course: ${test.lesson.course?.title}</p>
-        <p>Lesson: ${test.lesson?.title}</p>
-        <p>Test: ${test?.title}</p>
-        <p>Totoal Question: ${arrayCorrect?.length}</p>
-        <p>Total Correct: ${numberCorrect}</p>
-        <p>Status: Pass</p>`,
-      });
+      // await this.mailerService.sendMail({
+      //   to: student.email,
+      //   subject: 'Notification of test results',
+      //   html: `<h1>TEST INFO</h1>
+      //   <p>Parent: ${parent?.name || ''}</p>
+      //   <p>Student: ${student?.name}</p>
+      //   <p>Course: ${test.lesson.course?.title}</p>
+      //   <p>Lesson: ${test.lesson?.title}</p>
+      //   <p>Test: ${test?.title}</p>
+      //   <p>Totoal Question: ${arrayCorrect?.length}</p>
+      //   <p>Total Correct: ${numberCorrect}</p>
+      //   <p>Status: Pass</p>`,
+      // });
 
       return {
         status: HttpStatus.CREATED,
