@@ -15,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private mailerService: MailerService,
-  ) { }
+  ) {}
 
   async register(registerDto: RegisterDto) {
     try {
@@ -35,8 +35,13 @@ export class AuthService {
       // gửi mail khi đăng ký (chưa phân biệt teacher với student/parent)
       await this.mailerService.sendMail({
         to: registerDto.email,
-        subject: registerDto.role === 3 ? 'Đăng ký xác nhận tài khoản' : 'Đăng ký tài khoản thành công',
-        html: (registerDto.role === 1 || registerDto.role === 2) ? `
+        subject:
+          registerDto.role === 3
+            ? 'Đăng ký xác nhận tài khoản'
+            : 'Đăng ký tài khoản thành công',
+        html:
+          registerDto.role === 1 || registerDto.role === 2
+            ? `
         <body style="margin: 0; padding: 0; background-color: #ffffff;">
           <center>
                 <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
@@ -69,8 +74,7 @@ export class AuthService {
             </center>
         </body>
         `
-        :
-        `
+            : `
         <body style="margin: 0; padding: 0; background-color: #ffffff;">
             <center>
                 <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
@@ -103,7 +107,7 @@ export class AuthService {
                 </div>
             </center>
         </body>
-        `
+        `,
       });
 
       return await this.userService.create({
@@ -132,12 +136,12 @@ export class AuthService {
           message: 'Email hoặc Username đã tồn tại',
         });
       const password = await bcrypt.hash(registerForChildDto.password, 10);
-      
+
       // gửi mail khi đăng ký cho con (gửi vào mail con)
       await this.mailerService.sendMail({
         to: registerForChildDto.email,
         subject: 'Đăng ký tài khoản thành công',
-        html:  `
+        html: `
         <body style="margin: 0; padding: 0; background-color: #ffffff;">
           <center>
               <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
@@ -168,7 +172,7 @@ export class AuthService {
               </div>
           </center>
         </body>
-        `
+        `,
       });
 
       const child = await this.userService.create({

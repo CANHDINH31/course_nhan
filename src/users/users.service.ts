@@ -1,3 +1,4 @@
+import { ResetPassordDto } from './dto/reset-password-dto';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,12 +12,17 @@ import { DeleteUserDto } from './dto/delete-user.dto';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nest-modules/mailer';
 import * as moment from 'moment';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ForgotPasswordDto } from './dto/forgot-password-dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModal: Model<User>,
     private mailerService: MailerService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   private async onModuleInit() {
@@ -298,6 +304,64 @@ export class UsersService {
       };
     } catch (error) {
       throw error;
+    }
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    try {
+      const user = await this.userModal.findOne({
+        email: forgotPasswordDto.email,
+      });
+      if (!user)
+        throw new BadRequestException({
+          message: 'Email không tồn tại',
+        });
+
+      const { password, ...data } = user.toObject();
+
+      const token = await this.jwtService.signAsync(data, {
+        secret: this.configService.get('JWT_SECRET'),
+        expiresIn: '5m',
+      });
+
+      await this.mailerService.sendMail({
+        from: 'dinhphamcanh@gmail.com',
+        to: user.email,
+        subject: 'Reset mật khẩu',
+        text: `${this.configService.get(
+          'DOMAIN_WEB',
+        )}/auth/reset-password?token=${token}`,
+      });
+
+      return {
+        status: HttpStatus.OK,
+        data: { email: data.email },
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async resetPassword(resetPassordDto: ResetPassordDto) {
+    try {
+      const decode = await this.jwtService.verify(resetPassordDto.token, {
+        secret: this.configService.get('JWT_SECRET'),
+      });
+
+      const password = await bcrypt.hash(resetPassordDto.password, 10);
+      const data = await this.userModal.findByIdAndUpdate(
+        decode._id,
+        { password },
+        { new: true },
+      );
+      return {
+        status: HttpStatus.OK,
+        message: 'Cập nhật mật khẩu thành công',
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('Hết thời gian thay đổi mật khẩu');
     }
   }
 

@@ -46,8 +46,8 @@ import { SatisfyModule } from './satisfy/satisfy.module';
           debugger: true,
           sercureConnection: false,
           auth: {
-            user: 'otlichno.edu@gmail.com',
-            pass: 'oeth unba yltf uhzx',
+            user: 'dinhphamcanh@gmail.com',
+            pass: 'lujc nabi vfvm zlbn',
           },
           tls: {
             rejectUnAuthorized: true,
@@ -80,6 +80,14 @@ export class AppModule implements NestModule {
       .exclude(
         {
           path: '/api/auth/register',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/api/users/forgot-password',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/api/users/reset-password',
           method: RequestMethod.POST,
         },
         {

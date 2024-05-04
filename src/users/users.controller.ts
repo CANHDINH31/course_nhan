@@ -12,6 +12,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PasswordDto } from './dto/password-dto';
+import { ForgotPasswordDto } from './dto/forgot-password-dto';
+import { ResetPassordDto } from './dto/reset-password-dto';
 
 @Controller('users')
 export class UsersController {
@@ -51,6 +53,16 @@ export class UsersController {
   @Patch('/change-password')
   changePassword(@Body() passwordDto: PasswordDto, @Req() req) {
     return this.usersService.changePassword(passwordDto, req?.user?._id);
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return await this.usersService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPassordDto: ResetPassordDto) {
+    return await this.usersService.resetPassword(resetPassordDto);
   }
 
   @Patch('/:id')
