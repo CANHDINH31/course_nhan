@@ -77,6 +77,33 @@ export class CoursesService {
     }
   }
 
+  async new() {
+    try {
+      const listCourse = await this.courseModal
+        .find()
+        .sort({ createdAt: -1 })
+        .populate('teacher');
+
+      const result = [];
+
+      for (const course of listCourse) {
+        const total = await this.lessonModal.countDocuments({
+          course: course._id,
+        });
+
+        result.push({
+          ...course.toObject(),
+          totalLesson: total,
+          totalTest: total,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findOne(id: string) {
     try {
       const course = await this.courseModal.findById(id).populate('teacher');

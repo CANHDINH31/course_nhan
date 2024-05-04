@@ -45,6 +45,11 @@ export class CoursesController {
     );
   }
 
+  @Get('/new')
+  new(@Req() req) {
+    return this.coursesService.new();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(id);
