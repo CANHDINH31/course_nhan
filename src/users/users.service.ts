@@ -17,7 +17,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModal: Model<User>,
     private mailerService: MailerService,
-  ) { }
+  ) {}
 
   private async onModuleInit() {
     await this.initCreateAdmin();
@@ -249,7 +249,7 @@ export class UsersService {
   async findOne(id: string) {
     try {
       return await this.userModal.findById(id).populate('children');
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async changePassword(passwordDto: PasswordDto, userId: string) {
@@ -329,7 +329,7 @@ export class UsersService {
           new: true,
         },
       );
-      if(updateUserDto?.enable === 0) {
+      if (updateUserDto?.enable === 0) {
         await this.mailerService.sendMail({
           // from: 'otlichno.edu@gmail.com',
           to: data?.email,
