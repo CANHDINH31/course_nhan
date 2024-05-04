@@ -27,6 +27,11 @@ export class SubsController {
     return this.subsService.findAll(parent, student, course);
   }
 
+  @Get('/top')
+  top(@Req() req) {
+    return this.subsService.top();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.subsService.findOne(id);

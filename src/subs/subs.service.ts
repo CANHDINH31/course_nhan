@@ -64,6 +64,33 @@ export class SubsService {
     }
   }
 
+  async top() {
+    try {
+      const cash = await this.subModal.aggregate([
+        {
+          $group: {
+            _id: '$course',
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+        { $limit: 5 },
+        {
+          $lookup: {
+            from: 'courses',
+            let: { course: '$_id' },
+            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$course'] } } }],
+            as: 'course',
+          },
+        },
+      ]);
+
+      return cash;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findOne(id: string) {
     try {
       return this.subModal

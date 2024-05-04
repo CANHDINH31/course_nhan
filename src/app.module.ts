@@ -118,6 +118,10 @@ export class AppModule implements NestModule {
           path: '/api/rates',
           method: RequestMethod.GET,
         },
+        {
+          path: 'api/subs/top',
+          method: RequestMethod.GET,
+        },
       )
       .forRoutes('*');
   }

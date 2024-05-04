@@ -80,7 +80,7 @@ export class CoursesService {
   async new() {
     try {
       const listCourse = await this.courseModal
-        .find()
+        .find({ approve: 1 })
         .sort({ createdAt: -1 })
         .populate('teacher');
 
