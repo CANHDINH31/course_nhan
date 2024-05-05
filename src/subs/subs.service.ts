@@ -83,6 +83,17 @@ export class SubsService {
             as: 'course',
           },
         },
+        {
+          $unwind: '$course',
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'course.teacher',
+            foreignField: '_id',
+            as: 'course.teacher',
+          },
+        },
       ]);
 
       return cash;
