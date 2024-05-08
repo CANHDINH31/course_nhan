@@ -46,8 +46,8 @@ import { SatisfyModule } from './satisfy/satisfy.module';
           debugger: true,
           sercureConnection: false,
           auth: {
-            user: 'dinhphamcanh@gmail.com',
-            pass: 'lujc nabi vfvm zlbn',
+            user: 'otlichno.edu@gmail.com',
+            pass: 'oeth unba yltf uhzx',
           },
           tls: {
             rejectUnAuthorized: true,

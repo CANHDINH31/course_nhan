@@ -33,7 +33,7 @@ export class UsersService {
     try {
       const existAdmin = await this.userModal.findOne({ username: 'admin' });
       if (existAdmin) return;
-      const password = await bcrypt.hash('123456789', 10);
+      const password = await bcrypt.hash('Admin123456!', 10);
       await this.userModal.create({
         name: 'admin',
         username: 'admin',
@@ -136,7 +136,7 @@ export class UsersService {
         });
       }
 
-      // gửi mail khi admin phê duyệt giáo viên
+      // gửi mail phê duyệt giáo viên
       await this.mailerService.sendMail({
         // from: 'otlichno.edu@gmail.com',
         to: teacher?.email,
@@ -200,7 +200,7 @@ export class UsersService {
         });
       }
 
-      // gửi mail khi từ chối đăng ký giáo viên
+      // gửi mail từ chối đăng ký giáo viên
       await this.mailerService.sendMail({
         // from: 'otlichno.edu@gmail.com',
         to: teacher?.email,
@@ -287,14 +287,44 @@ export class UsersService {
 
       const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
-      // gửi mail khi thay đổi mật khẩu
+      // gửi mail thay đổi mật khẩu
       await this.mailerService.sendMail({
-        from: 'otlichno.edu@gmail.com',
+        // from: 'otlichno.edu@gmail.com',
         to: existedAccount?.email,
-        subject: 'Thông báo thay đổi mật khẩu',
+        subject: 'Thay đổi mật khẩu thành công',
         html: `
-      <h1>Xác nhận thay đổi mật khẩu tài khoản ${existedAccount.username}</h1>
-      <p>Vào thời gian ${currentDate} tài khoản của bạn trên hệ thống đã bị thay đổi mật khẩu. Nếu đó không phải là bạn xin hãy liên hệ ngay với đội ngũ quản trị viên để được hỗ trợ</p>
+        <body style="margin: 0; padding: 0; background-color: #ffffff;">
+          <center>
+              <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
+                  <table cellpadding="0" cellspacing="0" width="100%"
+                      style="max-width: 500px; margin-top: 30px; background-color: #f8f8f8; border: 1px solid #c7c3c3;">
+                      <tr>
+                          <td align="center" style="padding: 10px 0 10px 0; background-color: #aad58a;">
+                              <h1 style="font-size: 24px; margin-bottom: 20px;">Thay đổi mật khẩu thành công</h1>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="padding: 20px 40px;">
+                              <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin chào <strong style="color: rgb(50, 50, 226);">${existedAccount?.name}</strong>!</p>
+                              <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Chúng tôi thông báo tài khoản <strong>${existedAccount.username}</strong> đã thay đổi mật khẩu trên hệ thống vào lúc ${currentDate}.</p>
+                              <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;"><strong>Nếu đó không phải là bạn</strong>, xin hãy liên hệ ngay với đội ngũ quản trị viên của Otlichno để được hỗ trợ.</p>
+
+                              <br>
+                              <p style="font-size: 16px; ">Cảm ơn đã sử dụng dịch vụ của <strong>Otlichno Education!</strong></p>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="padding: 10px 20px 30px 20px;">
+                              <hr  width="85%" align="center" />
+                              <p style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                                  Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                                  hoặc số điện thoại +79533733420</p>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+          </center>
+        </body>
       `,
       });
 
@@ -323,14 +353,46 @@ export class UsersService {
         secret: this.configService.get('JWT_SECRET'),
         expiresIn: '5m',
       });
-
+      
+      // gửi mail quên mật khẩu
       await this.mailerService.sendMail({
-        from: 'dinhphamcanh@gmail.com',
+        // from: 'otlichno.edu@gmail.com',
         to: user.email,
-        subject: 'Reset mật khẩu',
-        text: `${this.configService.get(
-          'DOMAIN_WEB',
-        )}/auth/reset-password?token=${token}`,
+        subject: 'Khôi phục mật khẩu',
+        html: `
+          <body style="margin: 0; padding: 0; background-color: #ffffff;">
+            <center>
+                <div style="width: 700px; max-height: 600px; background-color: #f6f2f2; padding:10px 0 40px 0;">
+                    <table cellpadding="0" cellspacing="0" width="100%"
+                        style="max-width: 500px; margin-top: 30px; background-color: #f8f8f8; border: 1px solid #c7c3c3;">
+                        <tr>
+                            <td align="center" style="padding: 10px 0 10px 0; background-color: #aad58a;">
+                                <h1 style="font-size: 24px; margin-bottom: 20px;">Quên mật khẩu</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 40px;">
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Xin chào <strong style="color: rgb(50, 50, 226);">${user?.name}</strong>!</p>
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;">Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu Otlichno của bạn.</p>
+                                <a style="font-size: 16px; line-height: 24px; margin-bottom: 20px;  font-style: italic; text-decoration: none;" href="${this.configService.get('DOMAIN_WEB',)}/auth/reset-password?token=${token}">Nhấn vào đây để đặt lại mật khẩu của bạn.</a>
+                                <p style="font-size: 18px; line-height: 24px; margin-bottom: 20px;"><strong>Nếu đó không phải là bạn</strong>, xin hãy liên hệ ngay với đội ngũ quản trị viên của Otlichno để được hỗ trợ.</p>
+                                <br>
+                                <p style="font-size: 16px; ">Cảm ơn đã sử dụng dịch vụ của <strong>Otlichno Education!</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 20px 30px 20px;">
+                                <hr  width="85%" align="center" />
+                                <p style="font-size: 14px; font-style: italic; line-height: 20px; color: #4a4848; text-align: center; margin: 0;">
+                                    Đây là email được gửi tự động từ hệ thống. <br>Mọi thông tin cần hỗ trợ xin vui lòng liên hệ qua địa chỉ: <span style="color: rgb(64, 64, 225); text-decoration: none;">otlichno.edu@gmail.com</span>
+                                    hoặc số điện thoại +79533733420</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </center>
+          </body>
+        `,
       });
 
       return {
